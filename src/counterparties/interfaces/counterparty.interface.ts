@@ -1,5 +1,7 @@
 export interface Counterparty {
-    id: number
-    name: string
-    description: string
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 }

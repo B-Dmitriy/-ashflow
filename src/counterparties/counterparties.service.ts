@@ -9,7 +9,13 @@ export class CounterpartiesService {
 
   create(createCounterpartyDto: CreateCounterpartyDto): Counterparty {
     const id = Date.now();
-    const newCounterparty = { id, ...createCounterpartyDto };
+    const createdAt = new Date().toISOString();
+    const newCounterparty = {
+      id,
+      createdAt,
+      updatedAt: '',
+      ...createCounterpartyDto,
+    };
 
     this.counterparties.push(newCounterparty);
 
@@ -32,7 +38,11 @@ export class CounterpartiesService {
 
     const updatedCouterparties = this.counterparties.map((c) => {
       if (c.id === id) {
-        const newStateCounterparty = { ...c, ...updateCounterpartyDto };
+        const newStateCounterparty = {
+          ...c,
+          ...updateCounterpartyDto,
+          updatedAt: new Date().toISOString(),
+        };
         updatedCounterparty = newStateCounterparty;
         return newStateCounterparty;
       } else {
