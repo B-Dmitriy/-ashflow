@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CounterpartiesController } from './counterparties.controller';
-import { CounterpartiesService } from './counterparties.service';
+import { CounterpartiesController } from '../../../src/counterparties/counterparties.controller';
+import { CounterpartiesService } from '../../../src/counterparties/counterparties.service';
 
 describe('CounterpartiesController', () => {
   let app: INestApplication;

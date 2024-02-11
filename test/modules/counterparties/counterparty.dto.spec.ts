@@ -1,7 +1,8 @@
-import { CounterpartyDto } from './сounterparty.dto';
-import { CreateCounterpartyDto } from './create-counterparty.dto';
-import { GetCounterpartiesResponseDto } from './get-counterparties-response.dto';
-import {UpdateCounterpartyDto} from "./update-counterparty.dto";
+import { CounterpartyDto } from '../../../src/counterparties/dto/сounterparty.dto';
+import { CreateCounterpartyDto } from '../../../src/counterparties/dto/create-counterparty.dto';
+import { UpdateCounterpartyDto } from '../../../src/counterparties/dto/update-counterparty.dto';
+import { GetCounterpartiesResponseDto } from '../../../src/counterparties/dto/get-counterparties-response.dto';
+
 describe('All counterparty dto', () => {
   describe('CounterpartyDto', () => {
     it('should be defined', () => {
@@ -77,15 +78,15 @@ describe('All counterparty dto', () => {
     });
 
     it('should have properties', () => {
-      const createCounterpartyDto = new CreateCounterpartyDto();
-      expect(createCounterpartyDto).toHaveProperty('name');
-      expect(createCounterpartyDto).toHaveProperty('description');
+      const updateCounterpartyDto = new UpdateCounterpartyDto();
+      expect(updateCounterpartyDto).toHaveProperty('name');
+      expect(updateCounterpartyDto).toHaveProperty('description');
     });
 
     it('should have correct types for properties', () => {
-      const createCounterpartyDto = new CreateCounterpartyDto();
-      expect(typeof createCounterpartyDto.name).toBe('string');
-      expect(typeof createCounterpartyDto.description).toBe('string');
+      const updateCounterpartyDto = new UpdateCounterpartyDto();
+      expect(typeof updateCounterpartyDto.name).toBe('string');
+      expect(typeof updateCounterpartyDto.description).toBe('string');
     });
   });
 });
