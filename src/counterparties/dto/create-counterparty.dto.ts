@@ -1,4 +1,7 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class CreateCounterpartyDto {
-    name: string;
-    description: string;
+  @IsNotEmpty()
+  name: string;
+  description: string;
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Counterparty } from './interfaces/counterparty.interface';
-import type { CreateCounterpartyDto } from './dto/create-counterparty.dto';
-import type { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
-import type { GetCounterpartiesQueryDto } from './dto/get-counterparties-query.dto';
-import type { GetCounterpartiesResponseDto } from './dto/get-counterparties-response.dto';
+import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
+import { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
+import { GetCounterpartiesQueryDto } from './dto/get-counterparties-query.dto';
+import { GetCounterpartiesResponseDto } from './dto/get-counterparties-response.dto';
 
 @Injectable()
 export class CounterpartiesService {
@@ -29,8 +29,8 @@ export class CounterpartiesService {
   ): GetCounterpartiesResponseDto {
     return {
       items: this.counterparties,
-      page: +queryParams.page || 1,
-      limit: +queryParams.limit || 25,
+      page: +queryParams.page,
+      limit: +queryParams.limit,
       total: this.counterparties.length,
     };
   }
