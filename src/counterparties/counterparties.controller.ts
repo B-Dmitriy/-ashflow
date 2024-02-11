@@ -4,12 +4,14 @@ import {
   Body,
   Patch,
   Param,
+  Query,
   Delete,
   Controller,
 } from '@nestjs/common';
 import { CounterpartiesService } from './counterparties.service';
-import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
-import { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
+import type { CreateCounterpartyDto } from './dto/create-counterparty.dto';
+import type { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
+import type { GetCounterpartiesQueryDto } from './dto/get-counterparties-query.dto';
 
 @Controller('counterparties')
 export class CounterpartiesController {
@@ -21,8 +23,9 @@ export class CounterpartiesController {
   }
 
   @Get()
-  findAll() {
-    return this.counterpartiesService.findAll();
+  findAll(@Query() queryParams: GetCounterpartiesQueryDto) {
+    console.log(queryParams);
+    return this.counterpartiesService.findAll(queryParams);
   }
 
   @Get(':id')
