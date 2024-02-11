@@ -8,6 +8,7 @@ import {
   Delete,
   Controller,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { CounterpartiesService } from './counterparties.service';
 import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
@@ -30,7 +31,11 @@ export class CounterpartiesController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.counterpartiesService.findOne(id);
+    const counterparty = this.counterpartiesService.findOne(id);
+    if (!counterparty) {
+      throw new NotFoundException();
+    }
+    return counterparty;
   }
 
   @Patch(':id')

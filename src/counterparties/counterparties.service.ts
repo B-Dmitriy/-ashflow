@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Counterparty } from './interfaces/counterparty.interface';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CounterpartyDto } from './dto/сounterparty.dto';
 import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
 import { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
 import { GetCounterpartiesQueryDto } from './dto/get-counterparties-query.dto';
@@ -7,9 +7,9 @@ import { GetCounterpartiesResponseDto } from './dto/get-counterparties-response.
 
 @Injectable()
 export class CounterpartiesService {
-  private counterparties: Counterparty[] = [];
+  private counterparties: CounterpartyDto[] = [];
 
-  create(createCounterpartyDto: CreateCounterpartyDto): Counterparty {
+  create(createCounterpartyDto: CreateCounterpartyDto): CounterpartyDto {
     const id = Date.now();
     const createdAt = new Date().toISOString();
     const newCounterparty = {
@@ -35,17 +35,17 @@ export class CounterpartiesService {
     };
   }
 
-  findOne(id: number) {
+  findOne(id: number): CounterpartyDto | undefined {
     return this.counterparties.find((c) => c.id === id);
   }
 
   update(
     id: number,
     updateCounterpartyDto: UpdateCounterpartyDto,
-  ): Counterparty {
-    let updatedCounterparty: Counterparty;
+  ): CounterpartyDto {
+    let updatedCounterparty: CounterpartyDto;
 
-    const updatedCouterparties = this.counterparties.map((c) => {
+    const updatedCounterparts = this.counterparties.map((c) => {
       if (c.id === id) {
         const newStateCounterparty = {
           ...c,
@@ -59,13 +59,17 @@ export class CounterpartiesService {
       }
     });
 
-    this.counterparties = updatedCouterparties;
+    this.counterparties = updatedCounterparts;
 
     return updatedCounterparty;
   }
 
   remove(id: number): void {
-    this.counterparties = this.counterparties.filter((c) => c.id !== id);
+    const updatedCounterparts = this.counterparties.filter((c) => c.id !== id);
+    if (this.counterparties.length === updatedCounterparts.length) {
+      throw new NotFoundException();
+    }
+    this.counterparties = updatedCounterparts;
     return;
   }
 }

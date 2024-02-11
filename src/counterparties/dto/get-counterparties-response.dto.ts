@@ -1,8 +1,8 @@
-import { Counterparty } from '../interfaces/counterparty.interface';
+import { CounterpartyDto } from './сounterparty.dto';
 
 export class GetCounterpartiesResponseDto {
-  items: Counterparty[];
-  page: number;
-  limit: number;
-  total: number;
+  items: CounterpartyDto[] = [];
+  page: number = 0;
+  limit: number = 0;
+  total: number = 0;
 }
