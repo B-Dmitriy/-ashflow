@@ -1,5 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CounterpartyDto } from './dto/сounterparty.dto';
+import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Counterparty } from './entities/counterparty.entity';
 import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
 import { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
 import { GetCounterpartiesQueryDto } from './dto/get-counterparties-query.dto';
@@ -7,69 +9,52 @@ import { GetCounterpartiesResponseDto } from './dto/get-counterparties-response.
 
 @Injectable()
 export class CounterpartiesService {
-  private counterparties: CounterpartyDto[] = [];
+  constructor(
+    @InjectRepository(Counterparty)
+    private repository: Repository<Counterparty>,
+  ) {}
 
-  create(createCounterpartyDto: CreateCounterpartyDto): CounterpartyDto {
-    const id = Date.now();
-    const createdAt = new Date().toISOString();
-    const newCounterparty = {
-      id,
-      createdAt,
-      updatedAt: '',
-      ...createCounterpartyDto,
-    };
-
-    this.counterparties.push(newCounterparty);
-
-    return newCounterparty;
+  async create(
+    createCounterpartyDto: CreateCounterpartyDto,
+  ): Promise<Counterparty> {
+    return this.repository.save(createCounterpartyDto);
   }
 
-  findAll(
+  async findAll(
     queryParams: GetCounterpartiesQueryDto,
-  ): GetCounterpartiesResponseDto {
-    return {
-      items: this.counterparties,
-      page: +queryParams.page,
-      limit: +queryParams.limit,
-      total: this.counterparties.length,
-    };
-  }
-
-  findOne(id: number): CounterpartyDto | undefined {
-    return this.counterparties.find((c) => c.id === id);
-  }
-
-  update(
-    id: number,
-    updateCounterpartyDto: UpdateCounterpartyDto,
-  ): CounterpartyDto {
-    let updatedCounterparty: CounterpartyDto;
-
-    const updatedCounterparts = this.counterparties.map((c) => {
-      if (c.id === id) {
-        const newStateCounterparty = {
-          ...c,
-          ...updateCounterpartyDto,
-          updatedAt: new Date().toISOString(),
-        };
-        updatedCounterparty = newStateCounterparty;
-        return newStateCounterparty;
-      } else {
-        return c;
-      }
+  ): Promise<GetCounterpartiesResponseDto> {
+    const total = await this.repository.count();
+    const items = await this.repository.find({
+      // TODO: Refactoring
+      take: +queryParams.limit,
+      skip:
+        +queryParams.page === 1
+          ? 0
+          : (+queryParams.page - 1) * +queryParams.limit,
     });
 
-    this.counterparties = updatedCounterparts;
-
-    return updatedCounterparty;
+    return {
+      items,
+      page: +queryParams.page,
+      limit: +queryParams.limit,
+      total,
+    };
   }
 
-  remove(id: number): void {
-    const updatedCounterparts = this.counterparties.filter((c) => c.id !== id);
-    if (this.counterparties.length === updatedCounterparts.length) {
-      throw new NotFoundException();
-    }
-    this.counterparties = updatedCounterparts;
+  async findOne(id: number): Promise<Counterparty> {
+    return await this.repository.findOne({ where: { id } });
+  }
+
+  async update(
+    id: number,
+    updateCounterpartyDto: UpdateCounterpartyDto,
+  ): Promise<Counterparty> {
+    await this.repository.update(id, updateCounterpartyDto);
+    return await this.repository.findOne({ where: { id } });
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.repository.delete(id);
     return;
   }
 }

@@ -1,7 +1,7 @@
-import { CounterpartyDto } from './сounterparty.dto';
+import { Counterparty } from '../entities/counterparty.entity';
 
 export class GetCounterpartiesResponseDto {
-  items: CounterpartyDto[] = [];
+  items: Counterparty[] = [];
   page: number = 0;
   limit: number = 0;
   total: number = 0;

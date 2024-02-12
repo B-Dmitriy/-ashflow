@@ -20,8 +20,8 @@ export class CounterpartiesController {
   constructor(private readonly counterpartiesService: CounterpartiesService) {}
 
   @Post()
-  create(@Body() createCounterpartyDto: CreateCounterpartyDto) {
-    return this.counterpartiesService.create(createCounterpartyDto);
+  async create(@Body() createCounterpartyDto: CreateCounterpartyDto) {
+    return await this.counterpartiesService.create(createCounterpartyDto);
   }
 
   @Get()
