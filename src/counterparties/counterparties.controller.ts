@@ -8,8 +8,8 @@ import {
   Delete,
   Controller,
   ParseIntPipe,
-  NotFoundException,
 } from '@nestjs/common';
+
 import { CounterpartiesService } from './counterparties.service';
 import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
 import { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
@@ -25,29 +25,25 @@ export class CounterpartiesController {
   }
 
   @Get()
-  findAll(@Query() queryParams: GetCounterpartiesQueryDto) {
-    return this.counterpartiesService.findAll(queryParams);
+  async findAll(@Query() queryParams: GetCounterpartiesQueryDto) {
+    return await this.counterpartiesService.findAll(queryParams);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    const counterparty = this.counterpartiesService.findOne(id);
-    if (!counterparty) {
-      throw new NotFoundException();
-    }
-    return counterparty;
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.counterpartiesService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCounterpartyDto: UpdateCounterpartyDto,
   ) {
-    return this.counterpartiesService.update(id, updateCounterpartyDto);
+    return await this.counterpartiesService.update(id, updateCounterpartyDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.counterpartiesService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.counterpartiesService.remove(id);
   }
 }

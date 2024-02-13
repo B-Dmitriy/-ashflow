@@ -1,6 +1,8 @@
-import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { CounterpartyDto } from './dto/сounterparty.dto';
 import { Counterparty } from './entities/counterparty.entity';
 import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
 import { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
@@ -16,22 +18,19 @@ export class CounterpartiesService {
 
   async create(
     createCounterpartyDto: CreateCounterpartyDto,
-  ): Promise<Counterparty> {
+  ): Promise<CounterpartyDto> {
     return this.repository.save(createCounterpartyDto);
   }
 
   async findAll(
     queryParams: GetCounterpartiesQueryDto,
   ): Promise<GetCounterpartiesResponseDto> {
-    const total = await this.repository.count();
-    const items = await this.repository.find({
-      // TODO: Refactoring
+    const options: FindManyOptions = {
       take: +queryParams.limit,
-      skip:
-        +queryParams.page === 1
-          ? 0
-          : (+queryParams.page - 1) * +queryParams.limit,
-    });
+      skip: (+queryParams.page - 1) * +queryParams.limit,
+    };
+
+    const [items, total] = await this.repository.findAndCount(options);
 
     return {
       items,
@@ -41,20 +40,33 @@ export class CounterpartiesService {
     };
   }
 
-  async findOne(id: number): Promise<Counterparty> {
-    return await this.repository.findOne({ where: { id } });
+  async findOne(id: number): Promise<CounterpartyDto> {
+    const counterparty = await this.repository.findOneBy({ id });
+
+    if (!counterparty) throw new NotFoundException();
+
+    return counterparty;
   }
 
   async update(
     id: number,
     updateCounterpartyDto: UpdateCounterpartyDto,
-  ): Promise<Counterparty> {
-    await this.repository.update(id, updateCounterpartyDto);
-    return await this.repository.findOne({ where: { id } });
+  ): Promise<CounterpartyDto> {
+    const updateResult = await this.repository.update(
+      id,
+      updateCounterpartyDto,
+    );
+
+    if (updateResult.affected === 0) throw new NotFoundException();
+
+    return await this.repository.findOneBy({ id });
   }
 
   async remove(id: number): Promise<void> {
-    await this.repository.delete(id);
+    const deletedResult = await this.repository.delete(id);
+
+    if (deletedResult.affected === 0) throw new NotFoundException();
+
     return;
   }
 }

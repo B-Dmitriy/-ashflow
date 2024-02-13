@@ -1,8 +1,9 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -17,8 +18,8 @@ export class Counterparty {
   description: string;
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  createdAt: string;
 
-  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: string;
 }
