@@ -1,10 +1,15 @@
-// import { Counterparty } from '../../counterparties/entities/counterparty.entity';
+import { IsNotEmpty, Length } from 'class-validator';
 
 export class CreateTransactionDto {
-  id: number;
+  @Length(0, 255)
   comment: string;
+
+  @IsNotEmpty()
   amount: number;
+
+  @IsNotEmpty()
   currency: string;
-  // counterparty: Counterparty;
-  createdAt: string;
+
+  @IsNotEmpty()
+  counterpartyId: number;
 }
