@@ -1,7 +1,7 @@
 import {
   Entity,
   Column,
-  ManyToOne,
+  OneToOne,
   JoinColumn,
   CreateDateColumn,
   PrimaryGeneratedColumn,
@@ -22,7 +22,7 @@ export class Transaction {
   @Column({ nullable: false })
   currency: string;
 
-  @ManyToOne(() => Counterparty)
+  @OneToOne(() => Counterparty)
   @JoinColumn()
   counterparty: Counterparty;
 

@@ -1,9 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { IsNotEmpty, Length } from 'class-validator';
+import { CreateDateColumn } from 'typeorm';
 
-import { TransactionDto } from './transaction.dto';
+export class TransactionDto {
+  id: number;
 
-export class CreateTransactionDto extends PartialType(TransactionDto) {
   @Length(0, 255)
   comment: string;
 
@@ -15,4 +15,7 @@ export class CreateTransactionDto extends PartialType(TransactionDto) {
 
   @IsNotEmpty()
   counterpartyId: number;
+
+  @CreateDateColumn()
+  createdAt: string;
 }

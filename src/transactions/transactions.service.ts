@@ -1,10 +1,12 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { TransactionDto } from './dto/transaction.dto';
 import { Transaction } from './entities/transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { GetTransactionsQueryDto } from './dto/get-transaction-query.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -13,21 +15,25 @@ export class TransactionsService {
     private transactionsRepository: Repository<Transaction>,
   ) {}
 
-  async create(createTransactionDto: CreateTransactionDto) {
+  async create(
+    createTransactionDto: CreateTransactionDto,
+  ): Promise<TransactionDto> {
     return await this.transactionsRepository.save(createTransactionDto);
   }
 
-  async findAll() {
-    // TODO: возможно стоит использовать JOIN
+  // TODO: Common return type for tables
+  async findAll(queryParams: GetTransactionsQueryDto) {
     const [transactions, total] =
       await this.transactionsRepository.findAndCount({
+        take: +queryParams.limit,
+        skip: (+queryParams.page - 1) * +queryParams.limit,
         relations: { counterparty: true },
       });
 
     return {
       items: transactions,
-      page: 1,
-      limit: 25,
+      page: +queryParams.page,
+      limit: +queryParams.limit,
       total,
     };
   }
@@ -41,11 +47,22 @@ export class TransactionsService {
     });
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
+  async update(id: number, updateTransactionDto: UpdateTransactionDto) {
+    const updateResult = await this.transactionsRepository.update(
+      id,
+      updateTransactionDto,
+    );
+
+    if (updateResult.affected === 0) throw new NotFoundException();
+
+    return await this.transactionsRepository.findOneBy({ id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async remove(id: number) {
+    const deletedResult = await this.transactionsRepository.delete(id);
+
+    if (deletedResult.affected === 0) throw new NotFoundException();
+
+    return;
   }
 }
