@@ -27,7 +27,6 @@ export class TransactionsService {
       await this.transactionsRepository.findAndCount({
         take: +queryParams.limit,
         skip: (+queryParams.page - 1) * +queryParams.limit,
-        relations: { counterparty: true },
       });
 
     return {
@@ -39,12 +38,18 @@ export class TransactionsService {
   }
 
   async findOne(id: number) {
-    return await this.transactionsRepository.findOne({
-      where: { id },
-      relations: {
-        counterparty: true,
-      },
-    });
+    // TODO: It`s find all
+    const res = this.transactionsRepository.query(`
+        select t.id,t.amount,t.currency,
+               c.name as counterparty,
+               c.description as counterpartyDescription,
+               t.createdAt,t.comment
+        from "transaction" AS t 
+        LEFT JOIN counterparty AS c 
+        ON t.counterpartyId = c.id;
+    `);
+
+    return res;
   }
 
   async update(id: number, updateTransactionDto: UpdateTransactionDto) {

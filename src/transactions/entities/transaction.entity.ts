@@ -1,12 +1,9 @@
 import {
   Entity,
   Column,
-  OneToOne,
-  JoinColumn,
   CreateDateColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Counterparty } from '../../counterparties/entities/counterparty.entity';
 
 @Entity()
 export class Transaction {
@@ -22,9 +19,8 @@ export class Transaction {
   @Column({ nullable: false })
   currency: string;
 
-  @OneToOne(() => Counterparty)
-  @JoinColumn()
-  counterparty: Counterparty;
+  @Column({ nullable: false })
+  counterpartyId: number;
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: string;
