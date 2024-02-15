@@ -28,14 +28,16 @@ export class CounterpartiesService {
     const options: FindManyOptions = {
       take: +queryParams.limit,
       skip: (+queryParams.page - 1) * +queryParams.limit,
-      order: { [queryParams.sort]: queryParams.order },
       where: [
         { name: Like(`%${queryParams.search}%`) },
         { description: Like(`%${queryParams.search}%`) },
       ],
     };
 
-    console.log(Like(queryParams.search));
+    if (queryParams.sort && queryParams.order) {
+      options.order = { [queryParams.sort]: queryParams.order };
+    }
+
     const [items, total] = await this.repository.findAndCount(options);
 
     return {
