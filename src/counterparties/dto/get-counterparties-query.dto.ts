@@ -13,4 +13,13 @@ export class GetCounterpartiesQueryDto {
   @Min(1)
   @Type(() => Number)
   readonly limit: number = 25;
+
+  @IsOptional()
+  readonly sort: string = 'id';
+
+  @IsOptional()
+  readonly order: string = 'desc';
+
+  @IsOptional()
+  readonly search: string = '';
 }

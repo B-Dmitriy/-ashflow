@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindManyOptions } from 'typeorm';
+import { Repository, FindManyOptions, Like } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CounterpartyDto } from './dto/сounterparty.dto';
@@ -28,8 +28,14 @@ export class CounterpartiesService {
     const options: FindManyOptions = {
       take: +queryParams.limit,
       skip: (+queryParams.page - 1) * +queryParams.limit,
+      order: { [queryParams.sort]: queryParams.order },
+      where: [
+        { name: Like(`%${queryParams.search}%`) },
+        { description: Like(`%${queryParams.search}%`) },
+      ],
     };
 
+    console.log(Like(queryParams.search));
     const [items, total] = await this.repository.findAndCount(options);
 
     return {
