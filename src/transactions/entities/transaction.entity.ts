@@ -13,6 +13,9 @@ export class Transaction {
   @Column({ type: 'text' })
   comment: string;
 
+  @Column({ nullable: false })
+  type: string;
+
   @Column({ type: 'real', nullable: false })
   amount: number;
 

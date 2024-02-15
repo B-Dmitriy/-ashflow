@@ -5,8 +5,8 @@ import {
   Patch,
   Param,
   Delete,
-  Controller,
   Query,
+  Controller,
 } from '@nestjs/common';
 
 import { TransactionsService } from './transactions.service';

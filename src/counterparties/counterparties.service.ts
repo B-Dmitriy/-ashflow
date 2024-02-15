@@ -6,8 +6,8 @@ import { CounterpartyDto } from './dto/сounterparty.dto';
 import { Counterparty } from './entities/counterparty.entity';
 import { CreateCounterpartyDto } from './dto/create-counterparty.dto';
 import { UpdateCounterpartyDto } from './dto/update-counterparty.dto';
+import { PaginationResponseDto } from '../common/utils/dto/pagination.dto';
 import { GetCounterpartiesQueryDto } from './dto/get-counterparties-query.dto';
-import { GetCounterpartiesResponseDto } from './dto/get-counterparties-response.dto';
 
 @Injectable()
 export class CounterpartiesService {
@@ -24,7 +24,7 @@ export class CounterpartiesService {
 
   async findAll(
     queryParams: GetCounterpartiesQueryDto,
-  ): Promise<GetCounterpartiesResponseDto> {
+  ): Promise<PaginationResponseDto<Counterparty>> {
     const options: FindManyOptions = {
       take: +queryParams.limit,
       skip: (+queryParams.page - 1) * +queryParams.limit,
