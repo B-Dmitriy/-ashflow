@@ -49,6 +49,10 @@ export class TransactionsService {
         from "transaction" AS t
         LEFT JOIN counterparty AS c
         ON t.counterpartyId = c.id
+        WHERE t.comment LIKE '%${queryParams.search.trim()}%'
+        OR c.name LIKE '%${queryParams.search.trim()}%'
+        OR c.description LIKE '%${queryParams.search.trim()}%'
+        ORDER BY t.${queryParams.sort || 'createdAt'} ${queryParams.order.toUpperCase() || 'DESC'}
         LIMIT ${queryParams.limit}
         OFFSET ${(+queryParams.page - 1) * +queryParams.limit};
     `);

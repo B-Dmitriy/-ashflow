@@ -1,8 +1,6 @@
 ## Cashflow
 ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
-### Технологии
-- Основной фреймворк: NestJS
-- База данных: ?
+![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
 
 ### v0 (дополняется...)
 Основной набор функций для прототипа:

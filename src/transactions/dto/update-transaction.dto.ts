@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { ArrayContains, IsNotEmpty, Length } from 'class-validator';
+import {ArrayContains, IsIn, IsNotEmpty, Length} from 'class-validator';
 
 import { CreateTransactionDto } from './create-transaction.dto';
 
@@ -11,7 +11,7 @@ export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {
   amount: number;
 
   @IsNotEmpty()
-  @ArrayContains(['in', 'out'])
+  @IsIn(['in', 'out'])
   type: string;
 
   @IsNotEmpty()

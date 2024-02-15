@@ -1,4 +1,4 @@
-import { IsNotEmpty, ArrayContains, Length } from 'class-validator';
+import {IsNotEmpty, ArrayContains, Length, IsIn} from 'class-validator';
 import { CreateDateColumn } from 'typeorm';
 
 export class TransactionDto {
@@ -8,7 +8,7 @@ export class TransactionDto {
   comment: string;
 
   @IsNotEmpty()
-  @ArrayContains(['in', 'out'])
+  @IsIn(['in', 'out'])
   type: string;
 
   @IsNotEmpty()
