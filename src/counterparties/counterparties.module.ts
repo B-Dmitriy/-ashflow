@@ -9,6 +9,5 @@ import { CounterpartiesController } from './counterparties.controller';
   imports: [TypeOrmModule.forFeature([Counterparty])],
   controllers: [CounterpartiesController],
   providers: [CounterpartiesService],
-  exports: [CounterpartiesService],
 })
 export class CounterpartiesModule {}
