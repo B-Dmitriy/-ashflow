@@ -42,7 +42,7 @@ export class TransactionsService {
     queryParams: GetTransactionsQueryDto,
   ): Promise<PaginationResponseDto<TransactionDto>> {
     const transactions = await this.transactionsRepository.query(`
-        select t.id,t.amount,t.currency,
+        select t.id,t.amount,t.type,t.currency,
                c.name as counterparty,
                c.description as counterpartyDescription,
                t.createdAt,t.comment
