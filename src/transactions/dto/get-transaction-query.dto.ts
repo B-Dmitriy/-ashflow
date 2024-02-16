@@ -1,5 +1,5 @@
-import { IsInt, IsOptional, Min } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsIn, IsInt, IsOptional, Min } from 'class-validator';
 
 export class GetTransactionsQueryDto {
   @IsOptional()
@@ -13,4 +13,15 @@ export class GetTransactionsQueryDto {
   @Min(1)
   @Type(() => Number)
   readonly limit: number = 25;
+
+  @IsOptional()
+  @IsIn(['id', 'createdAt', ''])
+  readonly sort: string = 'createdAt';
+
+  @IsOptional()
+  @IsIn(['asc', 'desc', ''])
+  readonly order: string = 'asc';
+
+  @IsOptional()
+  readonly search: string = '';
 }

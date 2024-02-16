@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, Min } from 'class-validator';
+import {IsIn, IsInt, IsOptional, Min} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GetCounterpartiesQueryDto {
@@ -13,4 +13,15 @@ export class GetCounterpartiesQueryDto {
   @Min(1)
   @Type(() => Number)
   readonly limit: number = 25;
+
+  @IsOptional()
+  @IsIn(['id', 'name', 'createdAt', ''])
+  readonly sort: string = 'id';
+
+  @IsOptional()
+  @IsIn(['asc', 'desc', ''])
+  readonly order: string = 'desc';
+
+  @IsOptional()
+  readonly search: string = '';
 }
